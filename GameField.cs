@@ -6,29 +6,45 @@ namespace Conways_Game_of_Life
 {
     public class GameField
     {
-        private int[,] FutureField { get; set; }
-        public int[,] Field { get; set; }
-        public int[,] Rules { get; set; }
-
         public EventHandler<string> RedrawEvent;
+        private bool[,] FutureField { get; set; }
+        public bool[,] Field { get; set; }
+        private bool[,] Rules { get; set; }
 
         public bool IsPaused { get; set; }
 
         public GameField(int fieldWidth, int fieldHeight)
         {
-            Field = new int[fieldHeight, fieldWidth]; //ToDo check if indexes are same in Grid and Here
-            FutureField = new int[fieldHeight, fieldWidth];
-            Rules = new int[2, 9];
-            Rules[0, 3] = 1;
-            Rules[1, 2] = 1;
-            Rules[1, 3] = 1;
+            Field = new bool[fieldHeight, fieldWidth];
+            FutureField = new bool[fieldHeight, fieldWidth];
+            Rules = new bool[2, 9];
+            Rules[0, 3] = true; // 1 - 3
+            Rules[1, 2] = true; // 2 - 2
+            Rules[1, 3] = true; // 2 - 3
             IsPaused = true;
+        }
+
+        public void SetRules(string ruleString)
+        {
+            int value = 0;
+            Rules = new bool[2, 9];
+            foreach (var character in ruleString)
+            {
+                if (character == '/')
+                {
+                    value = 1;
+                    continue;
+                }
+
+                var index = int.Parse(character + "");
+                if (index < 9 && index >= 0)
+                    Rules[value, index] = true;
+            }
         }
 
         public void RiseRedrawEvent()
         {
-            if (RedrawEvent != null)
-                RedrawEvent.Invoke(this,"");
+            RedrawEvent?.Invoke(this, "");
         }
 
         public void LoopCalculations()
@@ -36,46 +52,55 @@ namespace Conways_Game_of_Life
             while (true)
                 if (!IsPaused)
                 {
-                    Stopwatch stopwatch = new Stopwatch();
+                    var stopwatch = new Stopwatch();
                     stopwatch.Start();
                     CalcNextState();
                     stopwatch.Stop();
-                    if (1500 - stopwatch.ElapsedMilliseconds > 0)
-                        Thread.Sleep((int)(1500 - stopwatch.ElapsedMilliseconds));
+                    if (1000 - stopwatch.ElapsedMilliseconds > 0)
+                        Thread.Sleep((int)(1000 - stopwatch.ElapsedMilliseconds));
                     RiseRedrawEvent();
                 }
         }
 
         public void CalcNextState()
         {
-            try
+            FutureField = new bool[Field.GetLength(0), Field.GetLength(1)];
+            for (var y = 0; y < Field.GetLength(0); y++)
+            for (var x = 0; x < Field.GetLength(1); x++)
             {
-                FutureField = new int[Field.GetLength(0), Field.GetLength(1)];
-                for (int y = 1; y < Field.GetLength(0) - 1; y++) //ToDo make it infinite
-                for (int x = 1; x < Field.GetLength(1) - 1; x++)
+                var aliveNeighbours = 0;
+                for (var i = -1; i <= 1; i++)
                 {
-                    int aliveNeighbours = 0;
-                    for (int i = -1; i <= 1; i++)
-                    for (int j = -1; j <= 1; j++)
+                    var tmpI = i;
+                    //Y Edge is repeating
+                    if (y + i < 0)
+                        i = Field.GetLength(0) - 1;
+                    else if (y + i > Field.GetLength(0) - 1)
+                        i = -Field.GetLength(0) + 1;
+                    for (var j = -1; j <= 1; j++)
                     {
-                        aliveNeighbours += Field[y + i, x + j];
+                        int tmpJ = j;
+                        //X Edge is repeating
+                        if (x + j < 0)
+                            j = Field.GetLength(1) - 1;
+                        else if (x + j > Field.GetLength(1) - 1)
+                            j = -Field.GetLength(1) + 1;
+                        aliveNeighbours += Field[y + i, x + j] ? 1 : 0;
+                        j = tmpJ;
                     }
-
-                    aliveNeighbours -= Field[y, x];
-                    if (Rules[0, aliveNeighbours] == 1 && Rules[1, aliveNeighbours] == 1)
-                        FutureField[y, x] = 1;
-                    else if (Rules[0, aliveNeighbours] == 0 && Rules[1, aliveNeighbours] == 0)
-                        FutureField[y, x] = 0;
-                    else
-                        FutureField[y, x] = Field[y, x];
+                    i = tmpI;
                 }
 
-                Field = FutureField;
+                aliveNeighbours -= Field[y, x] ? 1 : 0;
+                if (Rules[0, aliveNeighbours] && Rules[1, aliveNeighbours])
+                    FutureField[y, x] = true;
+                else if (!Rules[0, aliveNeighbours] && !Rules[1, aliveNeighbours])
+                    FutureField[y, x] = false;
+                else
+                    FutureField[y, x] = Field[y, x];
             }
-            catch (Exception e)
-            {
-                Trace.WriteLine(e);
-            }
+
+            Field = FutureField;
         }
     }
 }
