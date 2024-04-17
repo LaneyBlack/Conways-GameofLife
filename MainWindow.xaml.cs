@@ -88,7 +88,7 @@ namespace Conways_Game_of_Life
         private void ClearField(object sender, RoutedEventArgs e)
         {
             _gameField.Field = new bool[_gameField.Field.GetLength(0), _gameField.Field.GetLength(1)];
-            FieldGrid.Children.Clear();
+            FieldGridRedraw();
         }
 
         private void FieldWidthChanged(object sender, TextChangedEventArgs e)
@@ -155,7 +155,7 @@ namespace Conways_Game_of_Life
             for (var x = 0; x < _gameField.Field.GetLength(1); x++)
             {
                 FieldGrid.Children.Cast<Border>()
-                    .First(e => Grid.GetRow(e) == y && Grid.GetColumn(e) == x)
+                    .FirstOrDefault(e => Grid.GetRow(e) == y && Grid.GetColumn(e) == x)!
                     .Child.Opacity = (_gameField.Field[y, x] ? 1 : 0) * 100;
             }
         }

@@ -35,16 +35,15 @@ namespace Conways_Game_of_Life
                     value = 1;
                     continue;
                 }
-
                 var index = int.Parse(character + "");
-                if (index < 9 && index >= 0)
+                if (index is < 9 and >= 0)
                     Rules[value, index] = true;
             }
         }
 
         public void RiseRedrawEvent()
         {
-            RedrawEvent?.Invoke(this, "");
+            RedrawEvent?.Invoke(this, "Redraw");
         }
 
         public void LoopCalculations()
@@ -99,7 +98,6 @@ namespace Conways_Game_of_Life
                 else
                     FutureField[y, x] = Field[y, x];
             }
-
             Field = FutureField;
         }
     }

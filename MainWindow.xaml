@@ -19,13 +19,13 @@
                 <Setter Property="Background" Value="#e0e1dd"/>
             </Style>
         </Grid.Resources>
-        <Button Content="Play" HorizontalAlignment="Right" Margin="0,0,40,25" VerticalAlignment="Bottom"
+        <Button Content="Play" HorizontalAlignment="Right" Margin="0,0,40,35" VerticalAlignment="Bottom"
                 Click="Play"/>
-        <Button Content="Pause" HorizontalAlignment="Right" Margin="0,0,120,25" VerticalAlignment="Bottom"
+        <Button Content="Pause" HorizontalAlignment="Right" Margin="0,0,120,35" VerticalAlignment="Bottom"
                 Click="Pause"/>
-        <Button x:Name="ClearButton" Content="Clear" HorizontalAlignment="Left" Margin="40,0,0,25" VerticalAlignment="Bottom"
+        <Button x:Name="ClearButton" Content="Clear" HorizontalAlignment="Left" Margin="40,0,0,35" VerticalAlignment="Bottom"
                 Click="ClearField"/>
-        <Button x:Name="RandomButton" Content="Random" HorizontalAlignment="Left" Margin="120,0,0,25" VerticalAlignment="Bottom"
+        <Button x:Name="RandomButton" Content="Random" HorizontalAlignment="Left" Margin="120,0,0,35" VerticalAlignment="Bottom"
                 Click="RandomiseField"/>
         <Grid x:Name="FieldGrid" Background="#0d1b2a" Margin="15,15,15,100">
             <Grid.Resources>
@@ -41,7 +41,7 @@
                 </Style>
             </Grid.Resources>
         </Grid>
-        <Grid Margin="0,0,200,25" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+        <Grid Margin="0,0,200,35" HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="75" />
                 <ColumnDefinition Width="40" />
@@ -52,7 +52,7 @@
                      Width="40" Height="20"
                      HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" />
         </Grid>
-        <Grid Margin="0,0,325,25" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+        <Grid Margin="0,0,325,35" HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="75" />
                 <ColumnDefinition Width="40" />
